@@ -1,0 +1,83 @@
+﻿-- Tạo cơ sở dữ liệu với mã hóa UTF-8
+CREATE DATABASE OrderQuanNet
+COLLATE Latin1_General_100_CI_AI_SC_UTF8;
+GO
+
+USE OrderQuanNet;
+GO
+
+-- Tạo bảng Products với các trường dữ liệu
+CREATE TABLE Products (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(255) NOT NULL,
+    type NVARCHAR(255) NOT NULL,
+    price INT NOT NULL,
+    image_path NVARCHAR(255) NULL
+);
+GO
+
+-- Tạo bảng Users với các trường dữ liệu
+CREATE TABLE Users (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name NVARCHAR(255) NOT NULL,
+    username NVARCHAR(255) NOT NULL UNIQUE,
+    password NVARCHAR(255) NOT NULL,
+    type NVARCHAR(50) NOT NULL,
+    balance INT NOT NULL DEFAULT 0
+);
+GO
+
+-- Tạo bảng Orders với các trường dữ liệu và tự động cập nhật trường `created_at` và `updated_at`
+CREATE TABLE Orders (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    users_id INT NOT NULL,
+    product_id INT NOT NULL,
+    amount INT NOT NULL,
+    price INT NOT NULL,
+    status NVARCHAR(50) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT GETDATE(),
+    updated_at DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (users_id) REFERENCES Users(id),
+    FOREIGN KEY (product_id) REFERENCES Products(id)
+);
+GO
+
+-- Tạo trigger để tự động cập nhật `updated_at` khi bản ghi bị sửa đổi
+CREATE TRIGGER trg_UpdateTimestamp
+ON Orders
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Orders
+    SET updated_at = GETDATE()
+    WHERE id IN (SELECT id FROM inserted);
+END;
+GO
+
+-- Thêm sản phẩm vào bảng Products
+INSERT INTO Products (name, type, price, image_path) 
+VALUES 
+('snack', 'food', 30000, 'https://img.freepik.com/free-photo/fast-food-junk-food-concept_1339-1419.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('hamberger', 'food', 50000, 'https://img.freepik.com/free-psd/close-up-hamburger-isolated_23-2151604199.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('piza', 'food', 150000, 'https://img.freepik.com/free-photo/pizza-smoked-salmon_1203-2453.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('salas', 'food', 200000, 'https://img.freepik.com/free-photo/vietnamese-pork-sausage-salad_1203-7524.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('bánh', 'food', 50000, 'https://img.freepik.com/premium-photo/shrimps-with-pasta-squash_270456-30.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('egg', 'food', 30000, 'https://img.freepik.com/premium-photo/bruschetta-with-vegetables-eggs-white-background-high-quality-photo_311158-1301.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Trà đào', 'drink', 50000, 'https://img.freepik.com/free-photo/high-angle-long-drink-with-mint_23-2148673767.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Bạc hà', 'drink', 50000, 'https://img.freepik.com/free-psd/kombucha-drink-isolated_23-2151264043.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Nước cam', 'drink', 50000, 'https://img.freepik.com/premium-photo/yellow-cocktail-isolated_311158-3788.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Hồng Trà', 'drink', 50000, 'https://img.freepik.com/free-photo/refreshing-drink_144627-20829.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('1 Giờ', 'time', 20000, 'https://img.freepik.com/premium-vector/1-hour-clock-icon-comic-style-timer-countdown-cartoon-vector-illustration-isolated-background-time-measure-splash-effect-sign-business-concept_157943-22600.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('2 Giờ', 'time', 40000, 'https://img.freepik.com/premium-vector/illustration-vector-graphic-service-waiting-time-icon-design_1261391-1031.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('3 Giờ', 'time', 60000, 'https://img.freepik.com/premium-photo/metal-stopwatch-isolated-number-30_698953-15270.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('24 Giờ', 'time', 400000, 'https://img.freepik.com/free-vector/24-hours-anytime-customer-service-background-design_1017-54436.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Trà Đào', 'drink', 50000, 'https://img.freepik.com/premium-photo/iced-coffee-mixes-peach-juice-syrup-lemon-tea-isolated-white-background-healthy-menu-coffee-shop_536380-67.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Nước Chanh', 'drink', 50000, 'https://img.freepik.com/free-photo/fresh-lemon-water-glass-with-lemon-slices-fruits-isolated-white-background-summer-drink_74952-3618.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Nước Dâu', 'drink', 50000, 'https://img.freepik.com/premium-photo/tequila-sunrise-cocktail-isolated-white_311158-3705.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Coca', 'drink', 30000, 'https://img.freepik.com/free-photo/ice-falling-brown-drink_1194-1074.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Trà Sữa', 'drink', 50000, 'https://img.freepik.com/free-photo/cold-coffee_144627-22087.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Trà Chanh', 'drink', 60000, 'https://img.freepik.com/premium-photo/lime-water-with-black-coffee-isolated-white-background-healthy-menu-coffee-shop_536380-76.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Nước Khế', 'drink', 30000, 'https://img.freepik.com/premium-photo/ginger-drink_181303-3429.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Coffee', 'drink', 100000, 'https://img.freepik.com/free-psd/close-up-ice-coffee-isolated_23-2151833569.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),
+('Trứng luộc', 'food', 100000, 'https://img.freepik.com/premium-psd/healthy-food-3d-illustration_788357-1588.jpg?ga=GA1.1.1061206874.1717420590&semt=ais_tags_boosted'),

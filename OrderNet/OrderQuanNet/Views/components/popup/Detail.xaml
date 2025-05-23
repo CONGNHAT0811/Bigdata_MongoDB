@@ -1,0 +1,99 @@
+﻿<Window x:Class="OrderQuanNet.Views.components.popup.Detail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrderQuanNet.Views"
+        xmlns:components="clr-namespace:OrderQuanNet.Views.components"
+        mc:Ignorable="d"
+        Background="Transparent"
+        Title="Detail" Height="280" Width="600"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="Margin" Value="0, 0, 10, 0"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Green"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White" CornerRadius="10" Height="280" BorderThickness="1" BorderBrush="gray" VerticalAlignment="Top" Margin="0" Padding="0">
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="290"/>
+                    <ColumnDefinition Width="290"/>
+                </Grid.ColumnDefinitions>
+
+                <Image x:Name="ImagePath" Stretch="Uniform"
+                       Height="260" Width="260" Margin="0, 10, 0, 0" Grid.Column="0" />
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock x:Name="Title" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0, 5" />
+                    <TextBlock x:Name="Price" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Foreground="#FF757575" FontSize="12"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Số lượng:" Margin="10, 0, 20, 0" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBox Name="QuantityTextBox" Width="200" Height="35" Text="1" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 10, 0, 10">
+                            <Button Content="Thêm vào giỏ" Command="{Binding UpdateCartCommand}" Click="AddToCart" Style="{StaticResource RoundedButtonStyle}" Background="#FF2196F3"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 10, 0, 10">
+                            <Button Content="Đóng" Background="Red" Margin="5, 0, 5, 0" Click="Close" Style="{StaticResource RoundedButtonStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

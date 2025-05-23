@@ -1,0 +1,120 @@
+﻿<Window x:Class="OrderQuanNet.Views.components.popup.Bill"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Invoice Details" Height="650" Width="420" Background="White"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow" >
+    <Grid x:Name="BillGrid" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Hóa Đơn" 
+                   FontSize="22" FontWeight="Bold" 
+                   Foreground="#333333" 
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,20,20">
+            <TextBlock Text="Khách Hàng:" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="#444"/>
+            <ComboBox ItemsSource="{Binding Users}" 
+                      DisplayMemberPath="username"
+                      SelectedItem="{Binding SelectedUser, Mode=TwoWay}" 
+                      SelectionChanged="ComboBox_SelectionChanged" 
+                      Background="White" 
+                      Padding="10,10,20,10" 
+                      BorderThickness="0" 
+                      HorizontalContentAlignment="Center" 
+                      VerticalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left"
+                      Width="135" />    
+        </StackPanel>
+
+        <Grid Grid.Row="2" Margin="0,0,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Mã Hóa Đơn:" FontSize="14" FontWeight="SemiBold" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#444"/>
+            <TextBox Text="{Binding InvoiceCode}" 
+                     Grid.Row="0" Grid.Column="1" 
+                     Margin="5" 
+                     IsReadOnly="True" 
+                     Background="White" 
+                     Padding="5" 
+                     BorderThickness="0" />
+
+            <TextBlock Text="Ngày:" FontSize="14" FontWeight="SemiBold" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"  Foreground="#444" Margin="0,0,0,0"/>
+            <TextBox Text="{Binding CurrentDate}" 
+                     Grid.Row="1" Grid.Column="1" 
+                     Margin="5" 
+                     IsReadOnly="True" 
+                     Background="White" 
+                     VerticalContentAlignment="Center"
+                     HorizontalContentAlignment="Left"
+                     Padding="0" 
+                     BorderThickness="0" />
+
+        </Grid>
+
+        <DataGrid Grid.Row="3" ItemsSource="{Binding SelectedUserOrders}" AutoGenerateColumns="False" Margin="0,0,20,20" Background="White" BorderBrush="White" GridLinesVisibility="Vertical" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns >
+                <DataGridTextColumn  Width="*" Header="Sản Phẩm" Binding="{Binding ProductName}" />
+                <DataGridTextColumn Width="0.8*" Header="Số Lượng" Binding="{Binding Quantity}" />
+
+                <DataGridTemplateColumn Width="*" Header="Đơn Giá">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Price, StringFormat='N0'}"/>
+                                <TextBlock Text=" VND" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="*" Header="Thành Tiền">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Total, StringFormat='N0'}"/>
+                                <TextBlock Text=" VND" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="4" Margin="0,0,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Tổng Hóa Đơn:" FontSize="16" FontWeight="Bold" Grid.Column="0" TextAlignment="Right" VerticalAlignment="Center" Foreground="#555" Margin="10"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding GrandTotal, StringFormat='N0' }" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Foreground="#D32F2F"/>
+                <TextBlock Text=" VND" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#D32F2F" />
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="ExportButton" Content="Export to PDF" Width="140" Margin="10" Click="ExportToPdf_Click" Background="#4CAF50" Foreground="White" FontSize="14" Padding="10,5" BorderThickness="0" />
+            <Button x:Name="CloseButton" Content="Close" Width="100" Margin="10" Click="CloseButton_Click" Background="#F44336" Foreground="White" FontSize="14" Padding="10,5" BorderThickness="0" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,97 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Images\1h.png" />
+      <None Remove="Resources\Images\add.png" />
+      <None Remove="Resources\Images\download.png" />
+      <None Remove="Resources\Images\drink.png" />
+      <None Remove="Resources\Images\food.png" />
+      <None Remove="Resources\Images\invoice.png" />
+      <None Remove="Resources\Images\logout.png" />
+      <None Remove="Resources\Images\man.png" />
+      <None Remove="Resources\Images\padlock.png" />
+      <None Remove="Resources\Images\payment.png" />
+      <None Remove="Resources\Images\reset.png" />
+      <None Remove="Resources\Images\search.png" />
+      <None Remove="Resources\Images\time.png" />
+      <None Remove="Resources\Images\usermanagement.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="PDFsharp" Version="6.1.1" />
+      <PackageReference Include="PdfSharpCore" Version="1.3.65" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\Images\1h.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\Images\add.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\download.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\drink.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\food.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\invoice.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\logout.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\man.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\orders.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\padlock.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\payment.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\reset.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\search.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\time.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Resources\Images\usermanagement.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Food.xaml.cs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\Food.xaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Page>
+    </ItemGroup>
+
+</Project>

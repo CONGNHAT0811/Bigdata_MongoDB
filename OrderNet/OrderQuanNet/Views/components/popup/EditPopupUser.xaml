@@ -1,0 +1,111 @@
+﻿<Window x:Class="OrderQuanNet.Views.components.popup.EditPopupUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit User" Height="350" Width="400"
+        Background="White"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        Loaded="Window_Loaded">
+
+    <Border Background="White" BorderBrush="#E5E7EB" BorderThickness="1" Padding="20">
+        <StackPanel>
+            <TextBlock Text="Edit User" 
+               FontSize="24" 
+               FontWeight="Bold" 
+               Foreground="#1F2937" 
+               Margin="0,0,0,20" 
+               HorizontalAlignment="Center" />
+
+            <Grid Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical" Margin="0,0,10,0" Grid.Column="0">
+                    <TextBlock Text="Name" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="#4B5563" 
+                               Margin="0,0,0,5" />
+                    <Border Background="#F9FAFB" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="5">
+                        <TextBox x:Name="txtName" Height="40" BorderThickness="0" VerticalAlignment="Center" Padding="10" Background="Transparent" />
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Margin="0,0,10,0" Grid.Column="1">
+                    <TextBlock Text="User Name" 
+                       FontSize="14" 
+                       FontWeight="SemiBold" 
+                       Foreground="#4B5563" 
+                       Margin="0,0,0,5" />
+                    <Border Background="#F9FAFB" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="5">
+                        <TextBox x:Name="txtUserName" Height="40" BorderThickness="0" VerticalAlignment="Center" Padding="10" Background="Transparent" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical" Margin="0,0,10,0" Grid.Column="0">
+                    <TextBlock Text="Roles" 
+                                    FontSize="14" 
+                                    FontWeight="SemiBold" 
+                                    Foreground="#4B5563" 
+                                    Margin="0,0,0,5" />
+                    <Border Background="#F9FAFB" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="5">
+                        <ComboBox x:Name="txtType" Height="40" BorderThickness="0" Background="Transparent" VerticalAlignment="Center">
+                            <ComboBoxItem VerticalAlignment="Center" Content="admin" />
+                            <ComboBoxItem VerticalAlignment="Center" Content="member" />
+                        </ComboBox>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <TextBlock Text="Balance" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="#4B5563" 
+                               Margin="0,0,0,5" />
+                    <Border Background="#F9FAFB" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="5">
+                        <TextBox x:Name="txtBalance" Height="40" BorderThickness="0" Padding="10" Background="Transparent"  VerticalAlignment="Center" />
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="Cancel" 
+                        Width="100" 
+                        Height="40" 
+                        Background="#E5E7EB" 
+                        Foreground="#374151" 
+                        FontWeight="Bold" 
+                        BorderBrush="Transparent" 
+                        Margin="10,0,10,0" 
+                        Click="Cancel_Click" />
+                <Button Content="Delete" 
+                        Width="100" 
+                        Height="40" 
+                        Background="#EF4444" 
+                        Foreground="White" 
+                        FontWeight="Bold" 
+                        BorderBrush="Transparent" 
+                        Margin="10,0,10,0" 
+                        Click="Delete_Click" />
+                <Button Content="Save" 
+                        Width="100" 
+                        Height="40" 
+                        Background="#6366F1" 
+                        Foreground="White" 
+                        FontWeight="Bold" 
+                        BorderBrush="Transparent" 
+                        Margin="10,0,10,0" 
+                        Click="Save_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>
