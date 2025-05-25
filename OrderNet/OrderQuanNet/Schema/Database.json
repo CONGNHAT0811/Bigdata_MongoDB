@@ -1,0 +1,115 @@
+[
+  {
+    "create": "Users",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [ "name", "username", "password", "type", "balance" ],
+        "properties": {
+          "_id": {
+            "bsonType": "objectId",
+            "description": "Auto-generated ID"
+          },
+          "name": {
+            "bsonType": "string",
+            "description": "User's full name"
+          },
+          "username": {
+            "bsonType": "string",
+            "description": "User login username"
+          },
+          "password": {
+            "bsonType": "string",
+            "description": "User password"
+          },
+          "type": {
+            "bsonType": "string",
+            "description": "User type"
+          },
+          "balance": {
+            "bsonType": "int",
+            "minimum": 0,
+            "description": "User account balance"
+          }
+        }
+      }
+    }
+  },
+  {
+    "create": "Products",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [ "name", "type", "price", "image_path" ],
+        "properties": {
+          "_id": {
+            "bsonType": "objectId",
+            "description": "Auto-generated ID"
+          },
+          "name": {
+            "bsonType": "string",
+            "description": "Product name"
+          },
+          "type": {
+            "bsonType": "string",
+            "description": "Product type/category"
+          },
+          "price": {
+            "bsonType": "int",
+            "minimum": 0,
+            "description": "Product price"
+          },
+          "image_path": {
+            "bsonType": "string",
+            "description": "Image path or URL"
+          }
+        }
+      }
+    }
+  },
+  {
+    "create": "Orders",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [ "users_id", "product_id", "amount", "price", "status", "created_at", "updated_at" ],
+        "properties": {
+          "_id": {
+            "bsonType": "objectId",
+            "description": "Auto-generated ID"
+          },
+          "users_id": {
+            "bsonType": "objectId",
+            "description": "Reference to Users collection"
+          },
+          "product_id": {
+            "bsonType": "objectId",
+            "description": "Reference to Products collection"
+          },
+          "amount": {
+            "bsonType": "int",
+            "minimum": 0,
+            "description": "Quantity ordered"
+          },
+          "price": {
+            "bsonType": "int",
+            "minimum": 0,
+            "description": "Total price"
+          },
+          "status": {
+            "bsonType": "string",
+            "description": "Order status"
+          },
+          "created_at": {
+            "bsonType": "string",
+            "description": "Creation timestamp (ISO string)"
+          },
+          "updated_at": {
+            "bsonType": "string",
+            "description": "Update timestamp (ISO string)"
+          }
+        }
+      }
+    }
+  }
+]

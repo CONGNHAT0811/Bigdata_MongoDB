@@ -1,67 +1,50 @@
 ﻿using OrderQuanNet.Models;
+using MongoDB.Bson;
+using System;
+using System.Collections.Generic;
 
 namespace OrderQuanNet.Services
 {
     public class ProductsService
     {
         private readonly Database<ProductsModel> _database;
-        public ProductsService() { _database = new Database<ProductsModel>("Products"); }
 
-        public bool Insert(ProductsModel product) { return _database.Insert(product); }
-        public bool Update(ProductsModel product) { return _database.Update(product); }
-        public bool Delete(ProductsModel product) { return _database.Delete(product); }
-
-        public ProductsModel Select(ProductsModel product)
+        public ProductsService()
         {
-            using var reader = _database.Select(product);
-            if (reader.Read())
-            {
-                return new ProductsModel
-                {
-                    id = Convert.ToInt32(reader["id"]),
-                    name = reader["name"].ToString(),
-                    type = reader["type"].ToString(),
-                    price = Convert.ToInt32(reader["price"]),
-                    image_path = reader["image_path"].ToString()
-                };
-            }
-            return null;
+            _database = new Database<ProductsModel>("Products");
         }
 
-        public ProductsModel SelectById(int id)
+        public void Insert(ProductsModel product)
         {
-            using var reader = _database.SelectById(id);
-            if (reader.Read())
-            {
-                return new ProductsModel
-                {
-                    id = Convert.ToInt32(reader["id"]),
-                    name = reader["name"].ToString(),
-                    type = reader["type"].ToString(),
-                    price = Convert.ToInt32(reader["price"]),
-                    image_path = reader["image_path"].ToString()
-                };
-            }
-            return null;
+            _database.Insert(product);
+        }
+
+        public void Update(ProductsModel product)
+        {
+            _database.Update(product);
+        }
+
+        public bool Delete(ProductsModel product)
+        {
+            if (product.id == ObjectId.Empty)
+                throw new ArgumentException("Product Id cannot be empty for delete.");
+
+            return _database.Delete((ObjectId)product.id);
+        }
+
+        public List<ProductsModel> Select(ProductsModel filterProduct, bool includeNulls = false)
+        {
+            return _database.Select(filterProduct, includeNulls);
+        }
+
+        public ProductsModel? SelectById(ObjectId id)
+        {
+            return _database.SelectById(id);
         }
 
         public List<ProductsModel> SelectAll()
         {
-            var products = new List<ProductsModel>();
-            using var reader = _database.SelectAll();
-            while (reader.Read())
-            {
-                products.Add(new ProductsModel
-                {
-                    id = Convert.ToInt32(reader["id"]),
-                    name = reader["name"].ToString(),
-                    type = reader["type"].ToString(),
-                    price = Convert.ToInt32(reader["price"]),
-                    image_path = reader["image_path"].ToString()
-                });
-            }
-
-            return products;
+            return _database.SelectAll();
         }
     }
 }

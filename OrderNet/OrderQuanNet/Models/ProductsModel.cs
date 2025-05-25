@@ -1,10 +1,15 @@
-﻿using OrderQuanNet.Services;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using OrderQuanNet.Services;
 
 namespace OrderQuanNet.Models
 {
     public class ProductsModel
     {
-        public int? id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("id")]
+        public ObjectId? id { get; set; }
         public string? name { get; set; }
         public string? type { get; set; }
         public int? price { get; set; }

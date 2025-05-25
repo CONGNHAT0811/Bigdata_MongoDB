@@ -1,10 +1,15 @@
-﻿using OrderQuanNet.Services;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using OrderQuanNet.Services;
 
 namespace OrderQuanNet.Models
 {
     public class UsersModel
     {
-        public int? id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId? id { get; set; } 
+
         public string? name { get; set; }
         public string? username { get; set; }
         public string? password { get; set; }

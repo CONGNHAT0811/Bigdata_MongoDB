@@ -1,154 +1,176 @@
-﻿using System.Data.SqlClient;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace OrderQuanNet.Services
 {
     internal class Database<T> where T : class
     {
-        private static readonly string _connectionString = "Server=localhost;Database=OrderQuanNet;Trusted_Connection=True;";
-        private readonly string _tableName;
+        private readonly IMongoCollection<T> _collection;
+        private readonly IMongoDatabase _database;
+        private readonly MongoClient _client;
 
-        public Database(string tableName) { _tableName = tableName; }
+        public Database(string collectionName)
+        {
+            _client = new MongoClient("mongodb://localhost:27017");
+            _database = _client.GetDatabase("OrderQuanNet");
+            _collection = _database.GetCollection<T>(collectionName);
+        }
 
         public bool Insert(T item)
         {
-            var columns = string.Join(", ", GetColumns(item, false, true));
-            var parameters = string.Join(", ", GetColumns(item, true, true));
-            var query = $"INSERT INTO {_tableName} ({columns}) VALUES ({parameters})";
+            if (item == null) return false;
 
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                using (var command = new SqlCommand(query, connection))
-                {
-                    AddParameters(command, item);
-                    connection.Open();
-                    var result = command.ExecuteNonQuery() > 0;
-                    connection.Close();
-                    return result;
-                }
+                _collection.InsertOne(item);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
+        // Update theo _id trong item
         public bool Update(T item)
         {
-            var setClause = string.Join(", ", CreateParameters(item, true, true));
-            var query = $"UPDATE {_tableName} SET {setClause} WHERE id = @id";
+            if (item == null) return false;
 
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                using (var command = new SqlCommand(query, connection))
-                {
-                    AddParameters(command, item);
-                    connection.Open();
-                    var result = command.ExecuteNonQuery() > 0;
-                    connection.Close();
-                    return result;
-                }
-            }
+            var idValue = GetIdValue(item);
+            if (idValue == null) return false;
+
+            var filter = Builders<T>.Filter.Eq("_id", idValue);
+            var result = _collection.ReplaceOne(filter, item);
+
+            return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
+        // Delete theo _id
+        public bool Delete(ObjectId id)
+        {
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var result = _collection.DeleteOne(filter);
+            return result.IsAcknowledged && result.DeletedCount > 0;
+        }
+
+        // Overload Delete nhận T (lấy id rồi gọi Delete id)
         public bool Delete(T item)
         {
-            var query = $"DELETE FROM {_tableName} WHERE id = @id";
+            var idValue = GetIdValue(item);
+            if (idValue == null) return false;
+            return Delete((ObjectId)idValue);
+        }
 
-            using (var connection = new SqlConnection(_connectionString))
+        public List<T> Select(T filterObject, bool includeNulls = false)
+        {
+            var filter = CreateFilter(filterObject, includeNulls);
+            return _collection.Find(filter).ToList();
+        }
+
+        public T? SelectById(ObjectId id)
+        {
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            return _collection.Find(filter).FirstOrDefault();
+        }
+
+        public List<T> SelectAll()
+        {
+            return _collection.Find(Builders<T>.Filter.Empty).ToList();
+        }
+
+        private FilterDefinition<T> CreateFilter(T item, bool includeNulls)
+        {
+            var filters = new List<FilterDefinition<T>>();
+            var builder = Builders<T>.Filter;
+
+            foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                using (var command = new SqlCommand(query, connection))
+                var value = prop.GetValue(item);
+
+                if (value != null || includeNulls)
                 {
-                    AddParameters(command, item);
-                    connection.Open();
-                    var result = command.ExecuteNonQuery() > 0;
-                    connection.Close();
-                    return result;
+                    string fieldName = prop.Name;
+
+                    if (string.Equals(fieldName, "id", StringComparison.OrdinalIgnoreCase))
+                        fieldName = "_id";
+
+                    filters.Add(builder.Eq(fieldName, value ?? BsonNull.Value));
                 }
             }
+
+            return filters.Count > 0 ? builder.And(filters) : builder.Empty;
         }
 
-        public SqlDataReader Select(T item, bool selectWithAllNullItem = false)
+        private object? GetIdValue(T item)
         {
-            var connection = new SqlConnection(_connectionString);
-            var parameters = selectWithAllNullItem ? string.Join(" AND ", CreateParameters(item, true, true)) : string.Join(" AND ", CreateParametersNotNull(item, true, true));
-            var query = $"SELECT * FROM {_tableName} WHERE {parameters}";
+            var idProp = typeof(T).GetProperties().FirstOrDefault(p =>
+                string.Equals(p.Name, "id", StringComparison.OrdinalIgnoreCase) ||
+                p.GetCustomAttributes(typeof(BsonIdAttribute), false).Any());
 
-            var command = new SqlCommand(query, connection);
-            AddParameters(command, item);
+            if (idProp == null)
+                return null;
 
-            command.CommandText = query;
-            connection.Open();
-            var reader = command.ExecuteReader();
-
-            return reader;
+            return idProp.GetValue(item);
         }
 
-        public SqlDataReader SelectById(int id)
+        public List<BsonDocument> AggregateWithLookup(string fromCollection, string localField, string foreignField, string asField)
         {
-            var query = $"SELECT * FROM {_tableName} WHERE id = @id";
-
-            var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@id", id);
-            connection.Open();
-            var reader = command.ExecuteReader();
-
-            return reader;
-        }
-
-        public SqlDataReader SelectAll(T? where = null)
-        {
-            var query = $"SELECT * FROM {_tableName}";
-
-            if (where != null)
+            var pipeline = new BsonDocument[]
             {
-                var parameters = string.Join(" AND ", CreateParametersNotNull(where, true, true));
-                query += $" WHERE {parameters}";
-            }
-
-            var connection = new SqlConnection(_connectionString);
-            var command = new SqlCommand(query, connection);
-            if (where != null) AddParameters(command, where);
-
-            connection.Open();
-            var reader = command.ExecuteReader();
-
-            return reader;
+                new BsonDocument("$lookup", new BsonDocument
+                {
+                    { "from", fromCollection },
+                    { "localField", localField },
+                    { "foreignField", foreignField },
+                    { "as", asField }
+                })
+            };
+            return _collection.Aggregate<BsonDocument>(pipeline).ToList();
         }
 
-        private IEnumerable<string> CreateParameters(T item, bool isParameter = false, bool excludeId = false)
+        public List<BsonDocument> TextSearch(string searchField, string searchText)
         {
-            foreach (var property in item.GetType().GetProperties())
-            {
-                if (excludeId && property.Name == "id") continue;
-                yield return isParameter ?
-                    (property.GetValue(item) == null ? $"{property.Name} IS NULL" : $"{property.Name} = @{property.Name}")
-                    : property.Name;
-            }
+            var collectionName = _collection.CollectionNamespace.CollectionName;
+            var collection = _database.GetCollection<BsonDocument>(collectionName);
+
+            var filter = Builders<BsonDocument>.Filter.Text(searchText);
+            return collection.Find(filter).ToList();
         }
 
-        private IEnumerable<string> CreateParametersNotNull(T item, bool isParameter = false, bool excludeId = false)
+        public List<BsonDocument> GroupAndSum(string groupByField, string sumField)
         {
-            foreach (var property in item.GetType().GetProperties())
+            var pipeline = new BsonDocument[]
             {
-                if (excludeId && property.Name == "id") continue;
-                if (property.GetValue(item) == null) continue;
-                yield return isParameter ? $"{property.Name} = @{property.Name}" : property.Name;
-            }
+                new BsonDocument("$group", new BsonDocument
+                {
+                    { "_id", "$" + groupByField },
+                    { "total", new BsonDocument("$sum", "$" + sumField) }
+                })
+            };
+            return _collection.Aggregate<BsonDocument>(pipeline).ToList();
         }
 
-        private void AddParameters(SqlCommand command, T item)
+        public List<BsonDocument> UnwindField(string arrayField)
         {
-            foreach (var property in item.GetType().GetProperties())
+            var pipeline = new BsonDocument[]
             {
-                command.Parameters.AddWithValue($"@{property.Name}", property.GetValue(item) ?? DBNull.Value);
-            }
+                new BsonDocument("$unwind", "$" + arrayField)
+            };
+            return _collection.Aggregate<BsonDocument>(pipeline).ToList();
         }
 
-        private IEnumerable<string> GetColumns(T item, bool isParameter = false, bool excludeId = false)
+        public List<BsonDocument> FilterByDateRange(string dateField, DateTime startDate, DateTime endDate)
         {
-            foreach (var property in item.GetType().GetProperties())
-            {
-                if (excludeId && property.Name == "id") continue;
-                if (property.GetValue(item) == null) continue;
-                yield return isParameter ? $"@{property.Name}" : property.Name;
-            }
+            var builder = Builders<BsonDocument>.Filter;
+            var filter = builder.Gte(dateField, startDate) & builder.Lte(dateField, endDate);
+            var collectionName = _collection.CollectionNamespace.CollectionName;
+            var collection = _database.GetCollection<BsonDocument>(collectionName);
+            return collection.Find(filter).ToList();
         }
     }
 }
