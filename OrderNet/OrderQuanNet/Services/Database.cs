@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 
 namespace OrderQuanNet.Services
 {
@@ -24,13 +25,12 @@ namespace OrderQuanNet.Services
         public bool Insert(T item)
         {
             if (item == null) return false;
-
             try
             {
                 _collection.InsertOne(item);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -78,10 +78,14 @@ namespace OrderQuanNet.Services
             return _collection.Find(filter).FirstOrDefault();
         }
 
-        public List<T> SelectAll()
+        public List<T> SelectAll(T? filterObject = null, bool includeNulls = false)
         {
-            return _collection.Find(Builders<T>.Filter.Empty).ToList();
+            if (filterObject == null)
+                return _collection.Find(Builders<T>.Filter.Empty).ToList();
+
+            return Select(filterObject, includeNulls);
         }
+
 
         private FilterDefinition<T> CreateFilter(T item, bool includeNulls)
         {

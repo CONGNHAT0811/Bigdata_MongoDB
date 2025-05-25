@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media.Imaging;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 
@@ -10,7 +11,7 @@ namespace OrderQuanNet.Views.components.popup
         private Action _updateCart;
 
         private ProductsModel product;
-        public Detail(int id)
+        public Detail(string id)
         {
             InitializeComponent();
             product = loadProduct(id);
@@ -28,12 +29,13 @@ namespace OrderQuanNet.Views.components.popup
             _updateCart = ((Main)Application.Current.MainWindow).UpdateCartAction;
         }
 
-        private ProductsModel loadProduct(int id)
+        private ProductsModel loadProduct(string id)
         {
+            var parseId = ObjectId.Parse(id.ToString());
             var allProducts = ProductDataManager.Products;
-            if (allProducts.Where(p => p.id == id).FirstOrDefault() != null)
+            if (allProducts.Where(p => p._id == parseId).FirstOrDefault() != null)
                 ProductDataManager.LoadProducts();
-            return allProducts.Where(p => p.id == id).FirstOrDefault();
+            return allProducts.Where(p => p._id == parseId).FirstOrDefault();
         }
 
         private void AddToCart(object sender, RoutedEventArgs e)
@@ -44,7 +46,7 @@ namespace OrderQuanNet.Views.components.popup
                 return;
             }
             int amouunt = int.Parse(QuantityTextBox.Text);
-            CartDataManager.addItem((int)product.id, amouunt);
+            CartDataManager.addItem(product._id ?? ObjectId.Empty, amouunt);
             MessageBox.Show("Đã thêm vào giỏ hàng!");
             _updateCart?.Invoke();
             this.Close();

@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 using OrderQuanNet.Views.components.popup;
@@ -28,15 +29,15 @@ namespace OrderQuanNet.Views
             List<HistoryItem> items = new List<HistoryItem>();
             foreach (var item in history)
             {
-                ProductsModel product = ProductDataManager.Products.Where(p => p.id == item.product_id).FirstOrDefault();
+                ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.product_id).FirstOrDefault();
                 items.Add(new HistoryItem
                 {
-                    id = item.id.Value,
-                    amount = item.amount.Value,
-                    status = item.status,
-                    name = product.name,
-                    image_path = product.image_path,
-                    price = product.price.Value,
+                    id = item._id ?? ObjectId.Empty, // Fix for CS0029  
+                    amount = item.amount ?? 0, // Fix for CS8629  
+                    status = item.status ?? "Unknown", // Fix for CS8601  
+                    name = product?.name ?? "Unknown Product", // Fix for CS8602 and CS8601  
+                    image_path = product?.image_path ?? string.Empty, // Fix for CS8601  
+                    price = product?.price ?? 0, // Fix for CS8629  
                 });
             }
             OrderItemsControl.ItemsSource = items;

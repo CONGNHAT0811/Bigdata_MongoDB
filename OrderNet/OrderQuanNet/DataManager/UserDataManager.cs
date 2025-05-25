@@ -22,7 +22,7 @@ namespace OrderQuanNet.DataManager
         public static void UpdateUser(UsersModel User)
         {
             if (User == null) throw new ArgumentNullException(nameof(User), "User cannot be null.");
-            var id = _Users.FindIndex(p => p.id == User.id);
+            var id = _Users.FindIndex(p => p._id == User._id);
             if (id != -1) _Users[id] = User;
         }
     }

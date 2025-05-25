@@ -21,7 +21,7 @@ namespace OrderQuanNet.Services
 
         public bool Update(UsersModel user)
         {
-            if (user.id == ObjectId.Empty)
+            if (user._id == ObjectId.Empty)
                 throw new ArgumentException("User id cannot be null or empty for update.");
 
             return _database.Update(user);
@@ -29,10 +29,10 @@ namespace OrderQuanNet.Services
 
         public bool Delete(UsersModel user)
         {
-            if (user.id == ObjectId.Empty)
+            if (user._id == ObjectId.Empty)
                 throw new ArgumentException("User id cannot be null or empty for delete.");
 
-            return _database.Delete((ObjectId)user.id);
+            return _database.Delete((ObjectId)user._id);
         }
 
         public bool CheckOldPassword(ObjectId userId, string oldPassword)

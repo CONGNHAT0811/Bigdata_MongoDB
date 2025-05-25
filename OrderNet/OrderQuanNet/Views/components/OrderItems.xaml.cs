@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 
 namespace OrderQuanNet.Views.components
@@ -73,7 +74,7 @@ namespace OrderQuanNet.Views.components
 
         private void DeleteItem(object sender, RoutedEventArgs e)
         {
-            int id = int.Parse(ItemId);
+            ObjectId id = ObjectId.Parse(ItemId);
             CartDataManager.removeItem(id);
             MessageBox.Show("Đã xóa sản phẩm khỏi giỏ hàng");
             _updateCart?.Invoke();

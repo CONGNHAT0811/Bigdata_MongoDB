@@ -27,7 +27,7 @@ namespace OrderQuanNet
             string hashedPassword = Main.HashMD5(password);
 
             UsersService usersService = new UsersService();
-            UsersModel user = usersService.Select(new UsersModel { username = username, password = hashedPassword });
+            UsersModel user = usersService.Select(new UsersModel { username = username, password = hashedPassword }).FirstOrDefault();
 
             if (user != null)
             {

@@ -64,12 +64,12 @@ namespace OrderQuanNet.Views.components
             Button button = (Button)sender;
             if (SessionManager.users.type != "admin")
             {
-                Detail detailWindow = new Detail(int.Parse(button.Tag.ToString()));
+                Detail detailWindow = new Detail(button.Tag.ToString());
                 detailWindow.ShowDialog();
             }
             else
             {
-                EditPopup editWindow = new EditPopup(int.Parse(button.Tag.ToString()));
+                EditPopup editWindow = new EditPopup(button.Tag.ToString());
                 editWindow.ShowDialog();
             }
         }

@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using MongoDB.Bson;
 
 namespace OrderQuanNet.Views.components.popup
 {
@@ -76,7 +77,7 @@ namespace OrderQuanNet.Views.components.popup
         {
             var today = DateTime.Now.Date;
             var orders = _ordersService
-                .SelectAll(new OrdersModel { users_id = SelectedUser.id })
+                .SelectAll(new OrdersModel { users_id = SelectedUser._id })
                 .Where(order =>
                     order.status == "DONE" &&
                     DateTime.TryParse(order.updated_at, out var updatedDate) &&
@@ -86,7 +87,7 @@ namespace OrderQuanNet.Views.components.popup
 
             foreach (var order in orders)
             {
-                string productName = GetProductNameById(order.product_id ?? 0);
+                string productName = GetProductNameById(order.product_id ?? ObjectId.Empty);
 
                 SelectedUserOrders.Add(new OrderViewModel
                 {
@@ -100,7 +101,7 @@ namespace OrderQuanNet.Views.components.popup
             OnPropertyChanged(nameof(SelectedUserOrders));
         }
 
-        private string GetProductNameById(int productId)
+        private string GetProductNameById(ObjectId productId)
         {
             var product = _productsService.SelectById(productId);
             return product?.name ?? "Unknown Product";

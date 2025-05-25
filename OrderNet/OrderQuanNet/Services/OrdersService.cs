@@ -20,7 +20,7 @@ namespace OrderQuanNet.Services
 
         public bool Update(OrdersModel order)
         {
-            if (order.id == ObjectId.Empty)
+            if (order._id == ObjectId.Empty)
                 return false;
 
             return _database.Update(order);
@@ -28,9 +28,9 @@ namespace OrderQuanNet.Services
 
         public bool Delete(OrdersModel order)
         {
-            if (order.id == ObjectId.Empty)
+            if (order._id == ObjectId.Empty)
                 return false;
-             return _database.Delete((ObjectId)(order.id));
+             return _database.Delete((ObjectId)(order._id));
         }
 
         public OrdersModel? SelectById(ObjectId id)
@@ -38,9 +38,9 @@ namespace OrderQuanNet.Services
             return _database.SelectById(id);
         }
 
-        public List<OrdersModel> SelectAll()
+        public List<OrdersModel> SelectAll(OrdersModel? ordersModel = null)
         {
-            return _database.SelectAll();
+            return _database.SelectAll(ordersModel);
         }
 
         public List<OrdersModel> Select(OrdersModel where)

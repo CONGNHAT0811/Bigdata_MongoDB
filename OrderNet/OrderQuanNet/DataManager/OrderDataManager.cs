@@ -15,7 +15,7 @@ namespace OrderQuanNet.DataManager
         public static void UpdateOrder(OrdersModel Order)
         {
             if (Order == null) throw new ArgumentNullException(nameof(Order), "Order cannot be null.");
-            var id = _Orders.FindIndex(p => p.id == Order.id);
+            var id = _Orders.FindIndex(p => p._id == Order._id);
             if (id != -1) _Orders[id] = Order;
         }
     }

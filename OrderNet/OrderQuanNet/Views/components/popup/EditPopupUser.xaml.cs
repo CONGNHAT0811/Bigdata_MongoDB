@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 using OrderQuanNet.Services;
@@ -12,12 +13,12 @@ namespace OrderQuanNet.Views.components.popup
 
         private UsersModel user;
 
-        public EditPopupUser(int id)
+        public EditPopupUser(string id)
         {
             InitializeComponent();
 
             UsersService usersService = new UsersService();
-            user = usersService.SelectById(id);
+            user = usersService.SelectById(ObjectId.Parse(id.ToString()));
 
             if (user == null)
             {

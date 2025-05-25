@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 
@@ -12,12 +13,13 @@ namespace OrderQuanNet.Views.components.popup
 
         private ProductsModel product;
 
-        public EditPopup(int id)
+        public EditPopup(string id)
         {
             InitializeComponent();
-            product = ProductDataManager.Products.Where(p => p.id == id).FirstOrDefault();
+            ObjectId parseId = ObjectId.Parse(id.ToString());
+            product = ProductDataManager.Products.Where(p => p._id == parseId).FirstOrDefault();
 
-            if (product == null || product.id == null)
+            if (product == null || product._id == null)
             {
                 MessageBox.Show("Sản phẩm không còn tồn tại!");
                 this.Close();

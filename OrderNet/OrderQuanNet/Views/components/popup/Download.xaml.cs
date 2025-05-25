@@ -43,7 +43,7 @@ namespace OrderQuanNet.Views.components.popup
                 csvContent.AppendLine("ID,Username,Name,Type,Balance");
                 foreach (var user in users)
                 {
-                    csvContent.AppendLine($"{user.id},{user.username},{user.name},{user.type},{user.balance}");
+                    csvContent.AppendLine($"{user._id},{user.username},{user.name},{user.type},{user.balance}");
                 }
                 File.WriteAllText(filePath, csvContent.ToString());
                 MessageBox.Show("Đã xuất dữ liệu ra CSV!");

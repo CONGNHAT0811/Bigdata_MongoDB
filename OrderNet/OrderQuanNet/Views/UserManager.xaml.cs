@@ -42,9 +42,9 @@ namespace OrderQuanNet.Views
         {
             Button button = (Button)sender;
 
-            if (button.Tag != null && int.TryParse(button.Tag.ToString(), out int parsedValue))
+            if (button.Tag != null)
             {
-                EditPopupUser editWindow = new EditPopupUser(parsedValue);
+                EditPopupUser editWindow = new EditPopupUser(button.Tag.ToString());
                 editWindow.ShowDialog();
             }
         }

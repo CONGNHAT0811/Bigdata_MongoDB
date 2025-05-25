@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 using OrderQuanNet.Services;
@@ -73,7 +74,7 @@ namespace OrderQuanNet.Views.components
 
         private void ChangeOrdersStatus(object sender, RoutedEventArgs e)
         {
-            int id = int.Parse(ProccessBtn.Tag.ToString());
+            ObjectId id = ObjectId.Parse(ProccessBtn.Tag.ToString());
 
             OrdersService ordersService = new OrdersService();
             OrdersModel orders = ordersService.SelectById(id);
@@ -97,7 +98,9 @@ namespace OrderQuanNet.Views.components
         private static void OnItemIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (HistoryItemsManager)d;
-            var id = int.Parse(e.NewValue as string);
+
+
+            var id = ObjectId.Parse(e.NewValue as string);
 
 
             OrdersService ordersService = new OrdersService();
@@ -106,7 +109,7 @@ namespace OrderQuanNet.Views.components
             if (orders != null)
             {
                 UsersService usersService = new UsersService();
-                UsersModel users = usersService.SelectById((int)orders.users_id);
+                UsersModel users = usersService.SelectById((ObjectId)(orders.users_id));
                 control.Username.Text = "By: " + users.name;
             }
         }

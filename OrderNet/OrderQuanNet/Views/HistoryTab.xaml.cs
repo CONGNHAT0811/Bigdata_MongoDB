@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 
@@ -18,15 +19,15 @@ namespace OrderQuanNet.Views
         private void loadHistory()
         {
             HistoryDataManager.LoadHistory();
-            List<OrdersModel> history = HistoryDataManager.OrdersHistory.Where(o => o.users_id == SessionManager.users.id).ToList();
+            List<OrdersModel> history = HistoryDataManager.OrdersHistory.Where(o => o.users_id == SessionManager.users._id).ToList();
 
             List<HistoryItem> items = new List<HistoryItem>();
             foreach (var item in history)
             {
-                ProductsModel product = ProductDataManager.Products.Where(p => p.id == item.product_id).FirstOrDefault();
+                ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.product_id).FirstOrDefault();
                 items.Add(new HistoryItem
                 {
-                    id = item.id.Value,
+                    id = item._id ?? ObjectId.Empty,
                     amount = item.amount.Value,
                     status = item.status,
                     name = product.name,

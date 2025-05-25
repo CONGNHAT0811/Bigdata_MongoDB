@@ -41,7 +41,7 @@ namespace OrderQuanNet.Views.components
         private void EditPopupUserManager(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            EditPopupUser editWindow = new EditPopupUser(int.Parse(btn.Tag.ToString()));
+            EditPopupUser editWindow = new EditPopupUser(btn.Tag.ToString());
             editWindow.ShowDialog();
         }
     }

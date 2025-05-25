@@ -26,10 +26,10 @@ namespace OrderQuanNet.Services
 
         public bool Delete(ProductsModel product)
         {
-            if (product.id == ObjectId.Empty)
+            if (product._id == ObjectId.Empty)
                 throw new ArgumentException("Product Id cannot be empty for delete.");
 
-            return _database.Delete((ObjectId)product.id);
+            return _database.Delete((ObjectId)product._id);
         }
 
         public List<ProductsModel> Select(ProductsModel filterProduct, bool includeNulls = false)

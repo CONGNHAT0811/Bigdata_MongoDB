@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using MongoDB.Bson;
 using OrderQuanNet.DataManager;
 using OrderQuanNet.Models;
 
@@ -9,7 +10,7 @@ namespace OrderQuanNet.Views
 {
     public class OrderItem
     {
-        public int id { get; set; }
+        public ObjectId id { get; set; }
         public string name { get; set; }
         public string image_path { get; set; }
         public decimal price { get; set; }
@@ -35,10 +36,10 @@ namespace OrderQuanNet.Views
             List<OrderItem> cart = new List<OrderItem>();
             foreach (var item in data)
             {
-                ProductsModel product = ProductDataManager.Products.Where(p => p.id == item.Key).FirstOrDefault();
+                ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.Key).FirstOrDefault();
                 cart.Add(new OrderItem
                 {
-                    id = product.id.Value,
+                    id = product._id ?? ObjectId.Empty,
                     name = product.name,
                     image_path = product.image_path,
                     price = product.price.Value,
@@ -57,10 +58,10 @@ namespace OrderQuanNet.Views
             {
                 OrdersModel order = new OrdersModel();
 
-                order.users_id = SessionManager.users.id;
+                order.users_id = SessionManager.users._id;
                 order.product_id = item.Key;
                 order.amount = item.Value;
-                order.price = ProductDataManager.Products.Where(p => p.id == item.Key).FirstOrDefault().price.Value;
+                order.price = ProductDataManager.Products.Where(p => p._id == item.Key).FirstOrDefault().price.Value;
                 order.amount = item.Value;
                 order.status = "WAITING";
                 order.create();
