@@ -18,7 +18,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <component:HistoryItems Height="105" ImageSource="{Binding image_path}" ItemId="{Binding id}" ItemName="{Binding name}" ItemPrice="{Binding price, StringFormat='Giá tiền: {0:N0}'}" Amount="{Binding amount, StringFormat='Số lượng: {0:N0}'}" Status="{Binding status}"  Margin="0, 10, 0, 0" />
+                    <component:HistoryItems Height="105" ImageSource="{Binding image_path}" ItemId="{Binding _id}" ItemName="{Binding name}" ItemPrice="{Binding price, StringFormat='Giá tiền: {0:N0}'}" Amount="{Binding amount, StringFormat='Số lượng: {0:N0}'}" Status="{Binding status}"  Margin="0, 10, 0, 0" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

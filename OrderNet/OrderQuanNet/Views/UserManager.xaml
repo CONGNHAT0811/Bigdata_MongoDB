@@ -55,7 +55,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <component:UserItemsManager UserId="{Binding id}" Balance="{Binding balance, StringFormat='Số dư: {0:N0}'}" FullName="{Binding name}" />
+                            <component:UserItemsManager UserId="{Binding _id}" Balance="{Binding balance, StringFormat='Số dư: {0:N0}'}" FullName="{Binding name}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

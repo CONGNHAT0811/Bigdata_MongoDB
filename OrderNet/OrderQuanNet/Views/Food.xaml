@@ -56,7 +56,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <component:ProductItems 
-                                ItemId="{Binding id}" 
+                                ItemId="{Binding _id}" 
                                 ItemName="{Binding name}" 
                                 ItemPrice="{Binding price, StringFormat='Giá tiền: {0:N0}'}" 
                                 ItemImage="{Binding image_path}" />

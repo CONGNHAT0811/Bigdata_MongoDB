@@ -22,18 +22,10 @@ namespace OrderQuanNet.Services
             _collection = _database.GetCollection<T>(collectionName);
         }
 
-        public bool Insert(T item)
+        public async void Insert(T item)
         {
-            if (item == null) return false;
-            try
-            {
-                _collection.InsertOne(item);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            if (item == null) return;
+            await _collection.InsertOneAsync(item);
         }
 
         // Update theo _id trong item

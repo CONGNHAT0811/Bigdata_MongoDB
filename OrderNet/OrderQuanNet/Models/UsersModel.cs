@@ -8,6 +8,7 @@ namespace OrderQuanNet.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [BsonIgnoreIfNull]
         public ObjectId? _id { get; set; } 
 
         public string? name { get; set; }
@@ -18,7 +19,6 @@ namespace OrderQuanNet.Models
 
         public void create()
         {
-            this._id = null;
             UsersService usersService = new UsersService();
             usersService.Insert(this);
         }

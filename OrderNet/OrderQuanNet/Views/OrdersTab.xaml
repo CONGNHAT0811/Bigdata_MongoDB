@@ -22,7 +22,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <component:OrderItems Height="80" ImageSource="{Binding image_path}" ItemId="{Binding id}" ItemName="{Binding name}" ItemPrice="{Binding price, StringFormat='Giá tiền: {0:N0}'}" Amount="{Binding amount}" Margin="0, 10, 0, 0" />
+                        <component:OrderItems Height="80" ImageSource="{Binding image_path}" ItemId="{Binding _id}" ItemName="{Binding name}" ItemPrice="{Binding price, StringFormat='Giá tiền: {0:N0}'}" Amount="{Binding amount}" Margin="0, 10, 0, 0" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

@@ -13,9 +13,9 @@ namespace OrderQuanNet.Services
             _database = new Database<OrdersModel>("Orders");
         }
 
-        public bool Insert(OrdersModel order)
+        public void Insert(OrdersModel order)
         {
-            return _database.Insert(order);
+            _database.Insert(order);
         }
 
         public bool Update(OrdersModel order)
