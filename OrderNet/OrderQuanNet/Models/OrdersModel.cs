@@ -36,6 +36,7 @@ namespace OrderQuanNet.Models
         public void save()
         {
             OrdersService ordersService = new OrdersService();
+            this.updated_at = DateTime.UtcNow.ToString("o");
             ordersService.Update(this);
         }
 
