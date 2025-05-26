@@ -39,7 +39,7 @@ namespace OrderQuanNet.Views
                 ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.Key).FirstOrDefault();
                 cart.Add(new OrderItem
                 {
-                    id = product._id ?? ObjectId.Empty,
+                    id = (ObjectId)product._id,
                     name = product.name,
                     image_path = product.image_path,
                     price = product.price.Value,

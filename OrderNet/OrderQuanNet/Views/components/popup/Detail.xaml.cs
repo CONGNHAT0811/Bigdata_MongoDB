@@ -45,8 +45,16 @@ namespace OrderQuanNet.Views.components.popup
                 MessageBox.Show("Bạn chỉ có thể đặt tối đa 10 sản phẩm cùng lúc!");
                 return;
             }
+
+            if (product._id == ObjectId.Empty)
+            {
+                MessageBox.Show("Mã sản phẩm không hợp lệ!");
+                return;
+            }
+
             int amouunt = int.Parse(QuantityTextBox.Text);
-            CartDataManager.addItem(product._id ?? ObjectId.Empty, amouunt);
+            
+            CartDataManager.addItem((ObjectId)product._id, amouunt);
             MessageBox.Show("Đã thêm vào giỏ hàng!");
             _updateCart?.Invoke();
             this.Close();
