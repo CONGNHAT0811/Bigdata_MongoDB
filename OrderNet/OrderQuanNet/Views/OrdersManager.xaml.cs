@@ -32,7 +32,7 @@ namespace OrderQuanNet.Views
                 ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.product_id).FirstOrDefault();
                 items.Add(new HistoryItem
                 {
-                    id = (ObjectId)item._id,
+                    _id = (ObjectId)item._id,
                     amount = (int)item.amount,
                     status = item.status,
                     name = product?.name, 
