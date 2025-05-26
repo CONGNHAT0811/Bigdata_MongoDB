@@ -7,7 +7,7 @@ namespace OrderQuanNet.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId id { get; set; }
+        public ObjectId _id { get; set; }
         public string name { get; set; }
         public string image_path { get; set; }
         public decimal price { get; set; }

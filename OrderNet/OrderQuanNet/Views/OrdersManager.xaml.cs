@@ -32,12 +32,12 @@ namespace OrderQuanNet.Views
                 ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.product_id).FirstOrDefault();
                 items.Add(new HistoryItem
                 {
-                    id = item._id ?? ObjectId.Empty, // Fix for CS0029  
-                    amount = item.amount ?? 0, // Fix for CS8629  
-                    status = item.status ?? "Unknown", // Fix for CS8601  
-                    name = product?.name ?? "Unknown Product", // Fix for CS8602 and CS8601  
-                    image_path = product?.image_path ?? string.Empty, // Fix for CS8601  
-                    price = product?.price ?? 0, // Fix for CS8629  
+                    id = (ObjectId)item._id,
+                    amount = (int)item.amount,
+                    status = item.status,
+                    name = product?.name, 
+                    image_path = product?.image_path, 
+                    price = (int)product.price,
                 });
             }
             OrderItemsControl.ItemsSource = items;
