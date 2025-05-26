@@ -62,7 +62,6 @@ namespace OrderQuanNet.Views
                 order.product_id = item.Key;
                 order.amount = item.Value;
                 order.price = ProductDataManager.Products.Where(p => p._id == item.Key).FirstOrDefault().price.Value;
-                order.amount = item.Value;
                 order.status = "WAITING";
                 order.create();
 

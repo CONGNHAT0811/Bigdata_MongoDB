@@ -27,6 +27,9 @@ namespace OrderQuanNet.Models
         public void create()
         {
             OrdersService ordersService = new OrdersService();
+            this.created_at = DateTime.UtcNow.ToString("o");
+            this.updated_at = DateTime.UtcNow.ToString("o");
+
             ordersService.Insert(this);
         }
 
