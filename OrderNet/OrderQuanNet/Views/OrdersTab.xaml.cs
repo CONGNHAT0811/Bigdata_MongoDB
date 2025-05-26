@@ -10,7 +10,7 @@ namespace OrderQuanNet.Views
 {
     public class OrderItem
     {
-        public ObjectId id { get; set; }
+        public ObjectId _id { get; set; }
         public string name { get; set; }
         public string image_path { get; set; }
         public decimal price { get; set; }
@@ -39,7 +39,7 @@ namespace OrderQuanNet.Views
                 ProductsModel product = ProductDataManager.Products.Where(p => p._id == item.Key).FirstOrDefault();
                 cart.Add(new OrderItem
                 {
-                    id = (ObjectId)product._id,
+                    _id = (ObjectId)product._id,
                     name = product.name,
                     image_path = product.image_path,
                     price = product.price.Value,
