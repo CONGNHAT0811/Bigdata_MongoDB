@@ -28,11 +28,11 @@ namespace OrderQuanNet.Views
                 items.Add(new HistoryItem
                 {
                     _id = item._id ?? ObjectId.Empty,
-                    amount = item.amount.Value,
+                    amount = item.amount ?? 0,
                     status = item.status,
                     name = product.name,
                     image_path = product.image_path,
-                    price = product.price.Value,
+                    price = product.price ?? 0,
                 });
             }
 

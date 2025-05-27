@@ -36,8 +36,8 @@ namespace OrderQuanNet.Views
                     amount = (int)item.amount,
                     status = item.status,
                     name = product?.name, 
-                    image_path = product?.image_path, 
-                    price = (int)product.price,
+                    image_path = product?.image_path,
+                    price = product != null ? (int)product.price : 0, // Sửa ở đây
                 });
             }
             OrderItemsControl.ItemsSource = items;
